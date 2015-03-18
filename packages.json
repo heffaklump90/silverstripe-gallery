@@ -1,0 +1,9 @@
+{
+    "packages": {
+        "heffaklump90/gallery": {
+            "dev-master": { @composer.json },
+            "1.2-dev": { @composer.json },
+            "1.2": {@composer.json}
+        }
+    }
+}
