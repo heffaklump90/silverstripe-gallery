@@ -375,7 +375,8 @@ class GalleryUploadField_ItemHandler extends UploadField_ItemHandler {
 				->first();
 
 		$data = array(
-			'Caption' => $joinObj->Caption	
+			'Caption' => $joinObj->Caption,
+			'Target' => $joinObj->Target	
 		);
 		$form->loadDataFrom($data);
 

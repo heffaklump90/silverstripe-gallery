@@ -39,6 +39,7 @@ class Gallery_ImageExtension extends DataExtension {
 
 		$fileAttributes = $fields->fieldByName('Root.Main.FilePreview')->fieldByName('FilePreviewData');
 		$fileAttributes->push(TextareaField::create('Caption', 'Caption:')->setRows(4));
+		$fileAttributes->push(TextField::create('Target', 'Target:'));
 
 		$fields->removeFieldsFromTab('Root.Main', array(
 			'Title',
@@ -54,20 +55,33 @@ class Gallery_ImageExtension extends DataExtension {
 	}
 	
 	public function Caption() {
-
+		if($obj = $this->getJoinObject()){
+			return $obj->Caption;
+		}
+		return false;
+	}
+	
+	public function Target() {
+		if($obj = $this->getJoinObject()){
+			return $obj->Target;
+		}
+		return false;
+	}
+	
+	private function getJoinObject(){
 		//TODO: Refactor so doesn't query database each time
 		$controller = Controller::curr();
 		$page = $controller->data();
 		
 		list($parentClass, $componentClass, $parentField, $componentField, $table) = $page->many_many('Images');
-                // check if page return many_many Images when not $table is not a object
-        			if(ClassInfo::exists($table)){
-	                    $joinObj = $table::get()
-	                            ->where("\"{$parentField}\" = '{$page->ID}' AND \"ImageID\" = '{$this->owner->ID}'")
-	                            ->first();
-	
-	                    return $joinObj->Caption;
-        			}
-        			return false;
+		// check if page return many_many Images when not $table is not a object
+		if(ClassInfo::exists($table)){
+			$joinObj = $table::get()
+			->where("\"{$parentField}\" = '{$page->ID}' AND \"ImageID\" = '{$this->owner->ID}'")
+			->first();
+		
+			return $joinObj;
+		}
+		return false;
 	}
 }
